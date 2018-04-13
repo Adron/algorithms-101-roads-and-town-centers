@@ -3,9 +3,16 @@ package main
 import "fmt"
 
 type nation struct {
+	// cities n, the number of roads, m, and the cost to build a town center ctown center, and the cost to repair a road croad. Each integer is space seperated.
+	cities int
+	roads int
+	townCenterCost int
+	roadRepairCost int
 }
 
-type city struct {
+type road struct {
+	originating int
+	destination int
 }
 
 func main() {
@@ -20,23 +27,25 @@ func DataRead() ([]int64, error) {
 		return nil, err
 	}
 
-	fmt.Printf("Nations: %d", queries)
+	fmt.Printf("Nations: %d\n\n", queries)
 
-	data := make([]int64, queries)
+	return GetQueries(queries)
+}
 
-	for i := range data {
-		_, err := fmt.Scanf("%d", &data[i])
+func GetQueries(index int64) ([]int64, error) {
+	queries := make([]int64, index)
+
+	for i := range queries {
+		_, err := fmt.Scanf("%d", &queries[i])
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	fmt.Println(data)
-
-	return data, nil
+	return queries, nil
 }
 
-func GetNation() {
+func GetQuery(){
 
 }
 
