@@ -6,13 +6,15 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type nation struct {
 	cities     int
-	roads      int
+	roadCount  int
 	costCenter int
 	costRoad   int
+	roads      []road
 }
 
 type road struct {
@@ -24,65 +26,64 @@ func main() {
 	DataRead()
 }
 
-func DataRead() (int, error) {
+func DataRead() ([]nation, error) {
 
 	reader := bufio.NewReader(os.Stdin)
-
 	textLine, _, _ := reader.ReadLine()
 	nations, _ := strconv.Atoi(string(textLine))
+	var nationStates []nation
 
-	fmt.Printf("Nations: %d\n", nations)
+	start := time.Now()
 
 	for i := 1; i < nations+1; i++ {
 		fmt.Printf("..Processing Nation %d\n", i)
 
 		nationLineValues := getSpaceSeparatedValues(textLine, reader)
-		fmt.Println(nationLineValues)
+		newNation := buildNation(nationLineValues)
 
-		var newNation nation
-		newNation.roads, _ = strconv.Atoi(nationLineValues[0])
-		newNation.cities, _ = strconv.Atoi(nationLineValues[1])
-		newNation.costCenter, _ = strconv.Atoi(nationLineValues[2])
-		newNation.costRoad, _ = strconv.Atoi(nationLineValues[3])
+		//fmt.Printf("Cities: %d\nRoads: %d\nTown Center Cost: %d\nRoad Cost: %d\n",
+		//	newNation.cities,
+		//	newNation.roadCount,
+		//	newNation.costCenter,
+		//	newNation.costRoad)
 
-		fmt.Printf("Cities: %d\nRoads: %d\nTown Center Cost: %d\nRoad Cost: %d\n",
-			newNation.cities,
-			newNation.roads,
-			newNation.costCenter,
-			newNation.costRoad)
-
-		for r := 1; r < newNation.roads+1; r++ {
+		for r := 1; r < newNation.roadCount+1; r++ {
 			roadLineValues := getSpaceSeparatedValues(textLine, reader)
-			var newRoad road
-			newRoad.originCity, _ = strconv.Atoi(roadLineValues[0])
-			newRoad.destinationCity, _ = strconv.Atoi(roadLineValues[1])
+			newRoad := buildRoad(roadLineValues)
 
-			fmt.Printf("Road %d: City Origin %d and Destination %d.\n", r, newRoad.originCity, newRoad.destinationCity)
+			newNation.roads = append(newNation.roads, newRoad)
+
+			//fmt.Printf("Road %d: City Origin %d and Destination %d.\n", r, newRoad.originCity, newRoad.destinationCity)
 		}
-		fmt.Println("- - - - - - - - -")
+
+		fmt.Println(len(newNation.roads))
+
+		nationStates = append(nationStates, newNation)
 	}
 
-	//for reader.ReadLine() {
-	//
-	//	fmt.Printf("Nations: %d", nations)
-	//
-	//	for i := 1; i < nations; i++ {
-	//
-	//		textLine = scanner.Text()
-	//
-	//		values := strings.Split(textLine, " ")
-	//
-	//		fmt.Printf("Nation: %s", values[0])
-	//
-	//
-	//
-	//
-	//
-	//	}
-	//	fmt.Println("Completed processing.")
-	//}
+	t := time.Now()
+	elapsed := t.Sub(start)
 
-	return 42, nil
+	fmt.Printf("It took %s to complete processing the cities.\n", elapsed)
+	fmt.Println("- - - - - - - - - - - - - - - - - -\n\n")
+
+	return nationStates, nil
+}
+
+func buildRoad(roadLineValues []string) road {
+	var newRoad road
+	newRoad.originCity, _ = strconv.Atoi(roadLineValues[0])
+	newRoad.destinationCity, _ = strconv.Atoi(roadLineValues[1])
+	return newRoad
+}
+
+func buildNation(nationLineValues []string) nation {
+	var newNation nation
+	newNation.cities, _ = strconv.Atoi(nationLineValues[0])
+	newNation.roadCount, _ = strconv.Atoi(nationLineValues[1])
+	newNation.costCenter, _ = strconv.Atoi(nationLineValues[2])
+	newNation.costRoad, _ = strconv.Atoi(nationLineValues[3])
+	return newNation
 }
 
 func getSpaceSeparatedValues(textLine []byte, reader *bufio.Reader) []string {
