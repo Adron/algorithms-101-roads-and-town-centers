@@ -23,51 +23,49 @@ type road struct {
 }
 
 func main() {
-	DataRead()
-}
-
-func DataRead() ([]nation, error) {
-
-	reader := bufio.NewReader(os.Stdin)
-	textLine, _, _ := reader.ReadLine()
-	nations, _ := strconv.Atoi(string(textLine))
-	var nationStates []nation
-
 	start := time.Now()
 
-	for i := 1; i < nations+1; i++ {
-		fmt.Printf("..Processing Nation %d\n", i)
-
-		nationLineValues := getSpaceSeparatedValues(textLine, reader)
-		newNation := buildNation(nationLineValues)
-
-		//fmt.Printf("Cities: %d\nRoads: %d\nTown Center Cost: %d\nRoad Cost: %d\n",
-		//	newNation.cities,
-		//	newNation.roadCount,
-		//	newNation.costCenter,
-		//	newNation.costRoad)
-
-		for r := 1; r < newNation.roadCount+1; r++ {
-			roadLineValues := getSpaceSeparatedValues(textLine, reader)
-			newRoad := buildRoad(roadLineValues)
-
-			newNation.roads = append(newNation.roads, newRoad)
-
-			//fmt.Printf("Road %d: City Origin %d and Destination %d.\n", r, newRoad.originCity, newRoad.destinationCity)
-		}
-
-		fmt.Println(len(newNation.roads))
-
-		nationStates = append(nationStates, newNation)
-	}
+	dataRead()
+	calculatePlan()
 
 	t := time.Now()
 	elapsed := t.Sub(start)
 
 	fmt.Printf("It took %s to complete processing the cities.\n", elapsed)
 	fmt.Println("- - - - - - - - - - - - - - - - - -\n\n")
+}
 
+func calculatePlan() (bestPlanPrice int) {
+
+	fmt.Println("Calculating")
+
+	return 4
+}
+
+func dataRead() ([]nation, error) {
+	nationStates := ingestNations()
 	return nationStates, nil
+}
+
+func ingestNations() []nation {
+	var nationStates []nation
+	reader := bufio.NewReader(os.Stdin)
+	textLine, _, _ := reader.ReadLine()
+	nations, _ := strconv.Atoi(string(textLine))
+
+	for i := 1; i < nations+1; i++ {
+		newNation := buildNation(getSpaceSeparatedValues(textLine, reader))
+		ingestRoads(newNation, textLine, reader)
+		nationStates = append(nationStates, newNation)
+	}
+	return nationStates
+}
+
+func ingestRoads(newNation nation, textLine []byte, reader *bufio.Reader) {
+	for r := 1; r < newNation.roadCount+1; r++ {
+		newRoad := buildRoad(getSpaceSeparatedValues(textLine, reader))
+		newNation.roads = append(newNation.roads, newRoad)
+	}
 }
 
 func buildRoad(roadLineValues []string) road {
