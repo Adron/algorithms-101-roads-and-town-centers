@@ -25,21 +25,14 @@ type road struct {
 func main() {
 	start := time.Now()
 
-	dataRead()
-	calculatePlan()
+	data, _ := dataRead()
+	calculatePlan(data)
 
 	t := time.Now()
 	elapsed := t.Sub(start)
 
-	fmt.Printf("It took %s to complete processing the cities.\n", elapsed)
-	fmt.Println("- - - - - - - - - - - - - - - - - -\n\n")
-}
-
-func calculatePlan() (bestPlanPrice int) {
-
-	fmt.Println("Calculating")
-
-	return 4
+	fmt.Printf("\nIt took %s to complete processing the cities.\n", elapsed)
+	fmt.Println("- - - - - - - - - - - - - - - - - -\n")
 }
 
 func dataRead() ([]nation, error) {
@@ -88,4 +81,21 @@ func getSpaceSeparatedValues(textLine []byte, reader *bufio.Reader) []string {
 	textLine, _, _ = reader.ReadLine()
 	values := strings.Split(string(textLine), " ")
 	return values
+}
+
+func calculatePlan(data []nation) (bestPlanPrice int) {
+
+	fmt.Println("Calculating")
+
+	fmt.Print(data)
+
+	return 4
+}
+
+func fixRoads(cost int) {
+
+}
+
+func fixTownCenters(cost int) {
+
 }

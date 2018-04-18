@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-echo "Build Project\n"
+echo "Building Project"
 
 /usr/local/go/bin/go build -o "app"
 
-echo "Starting Code Execution\n"
+echo "Starting Code Execution"
 
 echo "2
 3 3 2 1
