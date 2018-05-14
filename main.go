@@ -83,19 +83,33 @@ func getSpaceSeparatedValues(textLine []byte, reader *bufio.Reader) []string {
 	return values
 }
 
-func calculatePlan(data []nation) (bestPlanPrice int) {
+func calculatePlan(data []nation) (bestPlanPrice []int) {
 
-	fmt.Println("Calculating")
+	for i := 0; i < len(data); i++ {
 
-	fmt.Print(data)
+		fmt.Println("Calculating")
+
+		fmt.Print(data)
+
+		result := 0
+		bestPlanPrice = append(bestPlanPrice, result)
+	}
 
 	return 4
 }
 
-func fixRoads(cost int) {
+func fixTownCenters(cost int, towncenters int) {
+	totalTownCenterFixCost := fixTownCentersOnly(cost, towncenters)
+	totalRunningCost := 0
+
+	for totalRunningCost < totalTownCenterFixCost {
+
+	}
 
 }
 
-func fixTownCenters(cost int) {
-
+func fixTownCentersOnly(cost int, towncenters int) int {
+	return towncenters * cost
 }
+
+// Fix one town center,

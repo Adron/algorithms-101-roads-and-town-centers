@@ -45,4 +45,3 @@ echo "3
 echo "Done. Deleting executable."
 
 rm app
-
